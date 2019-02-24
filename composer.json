@@ -1,0 +1,17 @@
+{
+    "name": "dnsimmons/openweather",
+    "description": "OpenWeather is a Laravel package simplifying working with the free Open Weather Map APIs.",
+    "license": "LGPL-3.0",
+    "authors": [
+        {
+            "name": "Dave Simmons",
+            "email": "hello@dsimmons.me"
+        }
+    ],
+    "autoload": {
+            "psr-4": {
+                    "Dnsimmons\\OpenWeather\\": "src/"
+            }
+        },
+    "require": {}
+}
