@@ -127,6 +127,8 @@ Edit the `config/openweather.php` file in your Laravel instance and modify the `
 
 ## Methods
 
+Units can be imperial (default), metric, or kelvin. All methods return an array on success and FALSE on failure.
+
 **getCurrentWeatherByCityName**(*string $city*, *string $units*)
 
 **getCurrentWeatherByCityId**(*int $id*, *string $units*)
