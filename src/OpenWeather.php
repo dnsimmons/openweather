@@ -58,20 +58,27 @@ class OpenWeather{
 			return FALSE;
 		}
 		return [
-			'weather_updated' 			 => $struct['dt'],
-			'weather_updated_date' 	     => date('m-d-Y', $struct['dt']),
-			'weather_updated_time' 		 => date('h:i A', $struct['dt']),
-			'weather_updated_day' 	     => date('l', $struct['dt']),
-			'weather_location_name'      => $struct['name'], 
-			'weather_location_latitude'  => $struct['coord']['lat'],
-			'weather_location_longitude' => $struct['coord']['lon'],
-			'weather_location_country'   => $struct['sys']['country'],
-			'weather_time_sunrise'       => $struct['sys']['sunrise'],
-			'weather_time_sunset'        => $struct['sys']['sunset'],
-			'weather_condition_temp' 	 => round($struct['main']['temp']),
-			'weather_condition_name'     => $struct['weather'][0]['main'],
-			'weather_condition_desc'     => $struct['weather'][0]['description'],
-			'weather_condition_icon' 	 => 'http://openweathermap.org/img/w/'.$struct['weather'][0]['icon'].'.png',
+			'timestamp' => $struct['dt'],
+			'location'  => [
+				'name'      => $struct['name'], 
+				'country'   => $struct['sys']['country'],
+				'latitude'  => $struct['coord']['lat'],
+				'longitude' => $struct['coord']['lon'],
+			],
+			'condition' => [
+				'name'     	=> $struct['weather'][0]['main'],
+				'desc'     	=> $struct['weather'][0]['description'],
+				'icon' 	 	=> 'http://openweathermap.org/img/w/'.$struct['weather'][0]['icon'].'.png',
+			],
+			'forecast'  => [
+				'temp' 	    => round($struct['main']['temp']),
+				'temp_min'  => round($struct['main']['temp_min']),
+				'temp_max'  => round($struct['main']['temp_max']),
+				'pressure' 	=> round($struct['main']['pressure']),
+				'humidity'	=> round($struct['main']['humidity']),
+				'sunrise'   => $struct['sys']['sunrise'],
+				'sunset'    => $struct['sys']['sunset'],
+			]
 		];
 	}
 
@@ -90,22 +97,29 @@ class OpenWeather{
 		$forecast = [];
 		foreach($struct['list'] as $item){
 			$forecast[] = [
-				'forecast_updated' 			 => $item['dt'],
-				'forecast_updated_date' 	 => date('m-d-Y', $item['dt']),
-				'forecast_updated_time' 	 => date('h:i A', $item['dt']),
-				'forecast_updated_day' 	     => date('l', $item['dt']),		
-				'forecast_condition_temp' 	 => round($item['main']['temp']),
-				'forecast_condition_name'    => $item['weather'][0]['main'],
-				'forecast_condition_desc'    => $item['weather'][0]['description'],
-				'forecast_condition_icon' 	 => 'http://openweathermap.org/img/w/'.$item['weather'][0]['icon'].'.png',
+				'timestamp' => $item['dt'],	
+				'condition' => [
+					'name'     	=> $item['weather'][0]['main'],
+					'desc'     	=> $item['weather'][0]['description'],
+					'icon' 	 	=> 'http://openweathermap.org/img/w/'.$item['weather'][0]['icon'].'.png',
+				],
+				'forecast'  => [
+					'temp' 	    => round($item['main']['temp']),
+					'temp_min'  => round($item['main']['temp_min']),
+					'temp_max'  => round($item['main']['temp_max']),
+					'pressure' 	=> round($item['main']['pressure']),
+					'humidity'	=> round($item['main']['humidity']),
+				]
 			];
 		}
 		return [
-			'weather_location_name'      => $struct['city']['name'], 
-			'weather_location_latitude'  => $struct['city']['coord']['lat'],
-			'weather_location_longitude' => $struct['city']['coord']['lon'],
-			'weather_location_country'   => $struct['city']['country'],
-			'weather_forecast' 			 => $forecast,
+			'location'  => [
+				'name'      => $struct['city']['name'], 
+				'country'   => $struct['city']['country'],
+				'latitude'  => $struct['city']['coord']['lat'],
+				'longitude' => $struct['city']['coord']['lon'],
+			],
+			'forecast'  => $forecast
 		];
 	}
 

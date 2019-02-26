@@ -25,7 +25,7 @@ The package supports the following free Open Weather Map APIs:
 
 Use [composer](http://getcomposer.org) to install the package
 
-	composer require dnsimmons/openweather
+	$ composer require dnsimmons/openweather
 
 Add the service provider to your `config/app.php` along with an alias:
 
@@ -39,10 +39,8 @@ Add the service provider to your `config/app.php` along with an alias:
 	    'OpenWeather' => Dnsimmons\OpenWeather\OpenWeather::class,	
 	];
 
-## Configure
 
-OpenWeather reads its configuration values from a published app config file.
-To publish the required configuration file invoke the following artisan command:
+Publish the required package configuration file using the artisan command:
 
 	$ php artisan vendor:publish
 
@@ -60,68 +58,102 @@ Edit the `config/openweather.php` file in your Laravel instance and modify the `
 ### Current Weather
 
 	$weather = new OpenWeather();
-	$current = $weather->getCurrentWeatherByCity('Boston');
+	$current = $weather->getCurrentWeatherByPostal('02111');
 	print_r($current);
 
 **Output**
-
 	
 	Array
 	(
-	    [weather_updated] => 1550990400
-	    [weather_updated_date] => 02-24-2019
-	    [weather_updated_time] => 06:40 AM
-	    [weather_updated_day] => Sunday
-	    [weather_location_name] => Boston
-	    [weather_location_latitude] => 42.36
-	    [weather_location_longitude] => -71.06
-	    [weather_location_country] => US
-	    [weather_time_sunrise] => 1551007645
-	    [weather_time_sunset] => 1551047281
-	    [weather_condition_temp] => 33
-	    [weather_condition_name] => Clouds
-	    [weather_condition_desc] => overcast clouds
-	    [weather_condition_icon] => http://openweathermap.org/img/w/04n.png
+	    [timestamp] => 1551160643
+	    [location] => Array
+	        (
+	            [name] => Boston
+	            [country] => US
+	            [latitude] => 42.36
+	            [longitude] => -71.06
+	        )
+	
+	    [condition] => Array
+	        (
+	            [name] => Clear
+	            [desc] => clear sky
+	            [icon] => http://openweathermap.org/img/w/01n.png
+	        )
+	
+	    [forecast] => Array
+	        (
+	            [temp] => 26
+	            [temp_min] => 24
+	            [temp_max] => 28
+	            [pressure] => 1016
+	            [humidity] => 42
+	            [sunrise] => 1551180262
+	            [sunset] => 1551220226
+	        )
+	
 	)
 
 ### 5 Day 3 Hour Forecast
 
 	$weather  = new OpenWeather();
-	$forecast = $weather->getForecastWeatherByCity('Boston');
+	$forecast = $weather->getForecastWeatherByPostal('02111');
 	print_r($forecast);
 
 **Output**
 
 	Array
 	(
-	    [weather_location_name] => Boston
-	    [weather_location_latitude] => 42.3603
-	    [weather_location_longitude] => -71.0583
-	    [weather_location_country] => US
-	    [weather_forecast] => Array
+	    [location] => Array
+	        (
+	            [name] => Boston
+	            [country] => US
+	            [latitude] => 42.3603
+	            [longitude] => -71.0583
+	        )
+	
+	    [forecast] => Array
 	        (
 	            [0] => Array
 	                (
-	                    [forecast_updated] => 1550998800
-	                    [forecast_updated_date] => 02-24-2019
-	                    [forecast_updated_time] => 09:00 AM
-	                    [forecast_updated_day] => Sunday
-	                    [forecast_condition_temp] => 36
-	                    [forecast_condition_name] => Clouds
-	                    [forecast_condition_desc] => overcast clouds
-	                    [forecast_condition_icon] => http://openweathermap.org/img/w/04n.png
+	                    [timestamp] => 1551160800
+	                    [condition] => Array
+	                        (
+	                            [name] => Clear
+	                            [desc] => clear sky
+	                            [icon] => http://openweathermap.org/img/w/01n.png
+	                        )
+	
+	                    [forecast] => Array
+	                        (
+	                            [temp] => 25
+	                            [temp_min] => 25
+	                            [temp_max] => 29
+	                            [pressure] => 1014
+	                            [humidity] => 100
+	                        )
+	
 	                )
 	
 	            [1] => Array
 	                (
-	                    [forecast_updated] => 1551009600
-	                    [forecast_updated_date] => 02-24-2019
-	                    [forecast_updated_time] => 12:00 PM
-	                    [forecast_updated_day] => Sunday
-	                    [forecast_condition_temp] => 37
-	                    [forecast_condition_name] => Rain
-	                    [forecast_condition_desc] => light rain
-	                    [forecast_condition_icon] => http://openweathermap.org/img/w/10d.png
+	                    [timestamp] => 1551171600
+	                    [condition] => Array
+	                        (
+	                            [name] => Clear
+	                            [desc] => clear sky
+	                            [icon] => http://openweathermap.org/img/w/01n.png
+	                        )
+	
+	                    [forecast] => Array
+	                        (
+	                            [temp] => 24
+	                            [temp_min] => 24
+	                            [temp_max] => 27
+	                            [pressure] => 1017
+	                            [humidity] => 100
+	                        )
+	
 	                )
 		...
 
