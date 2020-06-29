@@ -66,7 +66,7 @@ Edit the `config/openweather.php` file in your Laravel instance and modify the `
         'format_day'            => 'l'
 	];
 
-## Usage
+## Example Usage
 
 In the example below we fetch the current weather by postal code.
 
@@ -74,6 +74,57 @@ In the example below we fetch the current weather by postal code.
 	$current = $weather->getCurrentWeatherByPostal('02111');
 	print_r($current);
 
+**Output**
+
+    Array
+    (
+        [formats] => Array
+            (
+                [lang] => en
+                [date] => m/d/Y
+                [day] => l
+                [time] => h:i A
+                [units] => imperial
+            )
+    
+        [datetime] => Array
+            (
+                [timestamp] => 1593387767
+                [timestamp_sunrise] => 1593335394
+                [timestamp_sunset] => 1593390304
+                [formatted_date] => 06/28/2020
+                [formatted_day] => Sunday
+                [formatted_time] => 11:42 PM
+                [formatted_sunrise] => 09:09 AM
+                [formatted_sunset] => 12:25 AM
+            )
+    
+        [location] => Array
+            (
+                [id] => 4930956
+                [name] => Boston
+                [country] => US
+                [latitude] => 42.36
+                [longitude] => -71.06
+            )
+    
+        [condition] => Array
+            (
+                [name] => Rain
+                [desc] => light rain
+                [icon] => https://openweathermap.org/img/w/10d.png
+            )
+    
+        [forecast] => Array
+            (
+                [temp] => 67
+                [temp_min] => 64
+                [temp_max] => 68
+                [pressure] => 1007
+                [humidity] => 88
+            )
+    
+    )
 
 ## Methods
 
