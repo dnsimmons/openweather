@@ -235,7 +235,7 @@ class OpenWeather
                     'condition' => [
                         'name' => $item['weather'][0]['main'],
                         'desc' => $item['weather'][0]['description'],
-                        'icon' => $this->url_icons . $item['weather'][0]['icon'] . '.png',
+                        'icon' => $this->api_endpoint_icons . $item['weather'][0]['icon'] . '.png',
                     ],
                     'forecast' => [
                         'temp' => round($item['temp']),
