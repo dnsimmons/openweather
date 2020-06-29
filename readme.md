@@ -126,24 +126,70 @@ In the example below we fetch the current weather by postal code.
     
     )
 
-## Methods
+### Methods
 
-Units can be imperial (default), metric, or kelvin. All methods return an array on success and FALSE on failure.
+All methods return an array on success and FALSE on failure.
+
+### Current Weather Methods
 
 **getCurrentWeatherByCityName**(*string $city*, *string $units*)
 
+**Params**
+- City Name (example: Boston)
+- Units (imperial (default), metric, or kelvin)
+
 **getCurrentWeatherByCityId**(*int $id*, *string $units*)
+
+**Params**
+- City ID
+- Units (imperial (default), metric, or kelvin)
 
 **getCurrentWeatherByCoords**(*string $latitude*, *string $longitude*, *string $units*)
 
+**Params**
+- Latitude
+- Longitude
+- Units (imperial (default), metric, or kelvin)
+
 **getCurrentWeatherByPostal**(*string $postal*, *string $units*)
+
+**Params**
+- US Postal Code
+- Units (imperial (default), metric, or kelvin)
+
+### 4 Day 3 Hour Forecast Methods
 
 **getForecastWeatherByCityName**(*string $city*, *string $units*)
 
+**Params**
+- City Name (example: Boston)
+- Units (imperial (default), metric, or kelvin)
+
 **getForecastWeatherByCityId**(*int $id*, *string $units*)
+
+**Params**
+- City ID
+- Units (imperial (default), metric, or kelvin)
 
 **getForecastWeatherByCoords**(*string $latitude*, *string $longitude*, *string $units*)
 
+**Params**
+- Latitude
+- Longitude
+- Units (imperial (default), metric, or kelvin)
+
 **getForecastWeatherByPostal**(*string $postal*, *string $units*)
 
+**Params**
+- US Postal Code
+- Units (imperial (default), metric, or kelvin)
+
+### Onecall Request Methods
+
 **getOnecallWeatherByCoords**(*string $latitude*, *string $longitude*, *string $units*, *string $exclude*)
+
+**Params**
+- Latitude
+- Longitude
+- Units (imperial (default), metric, or kelvin)
+- Exclude (comma separated values: current,hourly,daily)
