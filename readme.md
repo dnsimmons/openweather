@@ -126,7 +126,7 @@ In the example below we fetch the current weather by postal code.
     
     )
 
-### Methods
+## Methods
 
 All methods return an array on success and FALSE on failure.
 
@@ -192,4 +192,4 @@ All methods return an array on success and FALSE on failure.
 - Latitude
 - Longitude
 - Units (imperial (default), metric, or kelvin)
-- Exclude (comma separated values: current,hourly,daily)
+- Exclude (optional comma separated values: current,hourly,daily) 
