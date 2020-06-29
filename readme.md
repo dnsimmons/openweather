@@ -11,7 +11,7 @@
 
 OpenWeather is a [Laravel](https://laravel.com) package simplifying working with the free [Open Weather Map](https://openweathermap.org) APIs. 
 
-OpenWeather takes care of making requests to various free OpenWeather APIs and
+OpenWeather takes care of making requests to various free Open Weather Map APIs and
 returns well-structured easy to use weather data including conditions, temperatures, humidity, 
 pressure, location, and timestamp data.
 
