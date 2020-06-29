@@ -21,8 +21,8 @@ class OpenWeather
     private $api_endpoint_current = NULL;
     private $api_endpoint_forecast = NULL;
     private $api_endpoint_onecall = NULL;
+    private $api_endpoint_icons = NULL;
     private $api_lang = NULL;
-    private $url_icons = NULL;
     private $format_date = NULL;
     private $format_time = NULL;
     private $format_units = NULL;
