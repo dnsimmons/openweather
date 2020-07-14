@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Config;
  * @package  OpenWeather
  * @author    David Simmons <hello@dsimmons.me>
  * @license    https://opensource.org/licenses/LGPL-3.0 LGPL-3.0
- * @version    1.0.1
+ * @version    1.0.2
  * @since    2019-01-01
  */
 class OpenWeather
