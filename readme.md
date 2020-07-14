@@ -24,7 +24,7 @@ The package supports the following free Open Weather Map APIs:
 - [Current Weather](https://openweathermap.org/current)
 - [4 Day 3 Hour Forecast](https://openweathermap.org/api/hourly-forecast)
 - [Onecall Forecast](https://openweathermap.org/api/one-call-api)
-- 5 Day Historical (coming soon)
+- [5 Day Historical](https://openweathermap.org/api/one-call-api#history)
 
 ### Free API Limitations
 
@@ -199,3 +199,13 @@ All methods return an array on success and FALSE on failure.
 - Longitude
 - Units (imperial (default), metric, or kelvin)
 - Exclude (optional comma separated values: current,hourly,daily) 
+
+### Onecall Historical Request Methods
+
+**getHistoricalWeatherByCoords**(*string $latitude*, *string $longitude*, *string $date*, *string $units*)
+
+**Params**
+- Latitude
+- Longitude
+- Date (example: 7/12/2020)
+- Units (imperial (default), metric, or kelvin)
