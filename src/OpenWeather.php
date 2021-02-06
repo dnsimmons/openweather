@@ -643,7 +643,7 @@ class OpenWeather
         return $this->getOnecallWeather([
             'lat' => $latitude,
             'lon' => $longitude,
-            'part' => 'minutely' . ($exclude != '') ? ',' . $exclude : '',
+            'exclude' => 'minutely' . ($exclude != '') ? ',' . $exclude : '',
             'units' => $units,
             'lang' => $this->api_lang,
             'appid' => $this->api_key
