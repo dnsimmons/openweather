@@ -12,5 +12,3 @@ return [
     'format_time'           => 'h:i A',
     'format_day'            => 'l'
 ];
-
-?>
