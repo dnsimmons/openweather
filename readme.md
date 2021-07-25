@@ -42,6 +42,7 @@ Use [composer](http://getcomposer.org) to install the package
 	$ composer require dnsimmons/openweather
 
 For Laravel >= 5.5 the package is auto-discovered.
+
 For older Laravel versions prior to 5.5 add the service provider to your `config/app.php` along with an alias:
 
     'providers' => [
