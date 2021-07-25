@@ -13,5 +13,15 @@
                     "Dnsimmons\\OpenWeather\\": "src/"
             }
         },
-    "require": {}
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Dnsimmons\\OpenWeather\\OpenWeatherServiceProvider"
+            ],
+            "aliases": {
+                "OpenWeather": "Dnsimmons\\OpenWeather\\OpenWeather"
+            }
+        }
+    }
 }
