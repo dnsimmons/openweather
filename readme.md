@@ -60,7 +60,7 @@ Publish the required package configuration file using the artisan command:
 
 	$ php artisan vendor:publish
 
-Edit the `.env` file in your Laravel instance add the following environment variables and add your OpenWeather API key.
+Edit the `.env` file in your Laravel instance add the following environment variables and add your OpenWeather API key:
 
 	OPENWEATHER_API_KEY="your-api-key"
 	OPENWEATHER_API_LANG="en"
