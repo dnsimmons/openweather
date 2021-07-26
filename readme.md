@@ -56,13 +56,17 @@ For older Laravel versions prior to 5.5 add the service provider to your `config
 	];
 
 
-Publish the required package configuration file using the artisan command (Optional):
+Publish the required package configuration file using the artisan command:
 
 	$ php artisan vendor:publish
 
-Edit your `.env` file in your Laravel instance add the `OPENWHETHER_API_KEY` value with your Open Weather Map api key (App ID).
+Edit the `.env` file in your Laravel instance add the following environment variables and add your OpenWeather API key.
 
-	OPENWHETHER_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+	OPENWEATHER_API_KEY="your-api-key"
+	OPENWEATHER_API_LANG="en"
+	OPENWEATHER_API_DATE_FORMAT="m/d/Y"
+	OPENWEATHER_API_TIME_FORMAT="h:i A"
+	OPENWEATHER_API_DAY_FOPMAT="l"
 
 ## Example Usage
 
