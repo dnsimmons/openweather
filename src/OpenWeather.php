@@ -100,9 +100,14 @@ class OpenWeather
                 'longitude' => $struct['coord']['lon'],
             ],
             'condition' => [
+                'id'   => $struct['weather'][0]['id'],
                 'name' => $struct['weather'][0]['main'],
                 'desc' => $struct['weather'][0]['description'],
                 'icon' => $this->api_endpoint_icons . $struct['weather'][0]['icon'] . '.png',
+            ],
+            'wind' => [
+                'speed' => $struct['wind']['speed'],
+                'deg'   => $struct['wind']['deg'],
             ],
             'forecast' => [
                 'temp' => round($struct['main']['temp']),
@@ -142,9 +147,14 @@ class OpenWeather
                     'formatted_sunset' => date($this->format_time, $struct['city']['sunset']),
                 ],
                 'condition' => [
+                    'id'   => $item['weather'][0]['id'],
                     'name' => $item['weather'][0]['main'],
                     'desc' => $item['weather'][0]['description'],
                     'icon' => $this->api_endpoint_icons . $item['weather'][0]['icon'] . '.png',
+                ],
+                'wind' => [
+                    'speed' => $item['wind']['speed'],
+                    'deg'   => $item['wind']['deg'],
                 ],
                 'forecast' => [
                     'temp' => round($item['main']['temp']),
@@ -202,9 +212,14 @@ class OpenWeather
                 'formatted_sunset' => date($this->format_time, $struct['current']['sunset']),
             ];
             $current['condition'] = [
+                'id'   => $struct['current']['weather'][0]['id'],
                 'name' => $struct['current']['weather'][0]['main'],
                 'desc' => $struct['current']['weather'][0]['description'],
                 'icon' => $this->api_endpoint_icons . $struct['current']['weather'][0]['icon'] . '.png',
+            ];
+            $current['wind'] = [
+                'speed' => $struct['current']['wind_speed'],
+                'deg'   => $struct['current']['wind_deg'],
             ];
             $current['forecast'] = [
                 'temp' => round($struct['current']['temp']),
@@ -233,9 +248,14 @@ class OpenWeather
                         'formatted_sunset' => date($this->format_time, $struct['current']['sunset']),
                     ],
                     'condition' => [
+                        'id'   => $item['weather'][0]['id'],
                         'name' => $item['weather'][0]['main'],
                         'desc' => $item['weather'][0]['description'],
                         'icon' => $this->api_endpoint_icons . $item['weather'][0]['icon'] . '.png',
+                    ],
+                    'wind' => [
+                        'speed' => $item['wind_speed'],
+                        'deg'   => $item['wind_deg'],
                     ],
                     'forecast' => [
                         'temp' => round($item['temp']),
@@ -262,9 +282,14 @@ class OpenWeather
                         'formatted_sunset' => date($this->format_time, $item['sunset']),
                     ],
                     'condition' => [
+                        'id'   => $item['weather'][0]['id'],
                         'name' => $item['weather'][0]['main'],
                         'desc' => $item['weather'][0]['description'],
                         'icon' => $this->api_endpoint_icons . $item['weather'][0]['icon'] . '.png',
+                    ],
+                    'wind' => [
+                        'speed' => $item['wind_speed'],
+                        'deg'   => $item['wind_deg'],
                     ],
                     'forecast' => [
                         'temp' => round($item['temp']['day']),
@@ -325,9 +350,14 @@ class OpenWeather
                 'formatted_sunset' => date($this->format_time, $struct['current']['sunset']),
             ];
             $current['condition'] = [
+                'id'   => $struct['current']['weather'][0]['id'],
                 'name' => $struct['current']['weather'][0]['main'],
                 'desc' => $struct['current']['weather'][0]['description'],
                 'icon' => $this->api_endpoint_icons . $struct['current']['weather'][0]['icon'] . '.png',
+            ];
+            $current['wind'] = [
+                'speed' => $struct['current']['wind_speed'],
+                'deg'   => $struct['current']['wind_deg'],
             ];
             $current['forecast'] = [
                 'temp' => round($struct['current']['temp']),
@@ -351,9 +381,14 @@ class OpenWeather
                         'formatted_sunset' => date($this->format_time, $struct['current']['sunset']),
                     ],
                     'condition' => [
+                        'id'   => $item['weather'][0]['id'],
                         'name' => $item['weather'][0]['main'],
                         'desc' => $item['weather'][0]['description'],
                         'icon' => $this->api_endpoint_icons . $item['weather'][0]['icon'] . '.png',
+                    ],
+                    'wind' => [
+                        'speed' => $item['wind_speed'],
+                        'deg'   => $item['wind_deg'],
                     ],
                     'forecast' => [
                         'temp' => round($item['temp']),

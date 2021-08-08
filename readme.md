@@ -13,7 +13,7 @@ OpenWeather is a [Laravel](https://laravel.com) package simplifying working with
 
 OpenWeather takes care of making requests to various free Open Weather Map APIs and
 returns well-structured easy to use weather data including conditions, temperatures, humidity, 
-pressure, location, and timestamp data.
+pressure, wind, location, and timestamp data.
 
 Take a look at the Example Usage section output below for a typical structured response.
 
@@ -115,6 +115,12 @@ In the example below we fetch the current weather by postal code.
                 [name] => Rain
                 [desc] => light rain
                 [icon] => https://openweathermap.org/img/w/10d.png
+            )
+
+        [wind] => Array
+            (
+                [speed] => 11.5
+                [deg] => 200
             )
     
         [forecast] => Array
