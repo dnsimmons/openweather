@@ -112,6 +112,7 @@ In the example below we fetch the current weather by postal code.
     
         [condition] => Array
             (
+                [id]   => 801
                 [name] => Rain
                 [desc] => light rain
                 [icon] => https://openweathermap.org/img/w/10d.png
