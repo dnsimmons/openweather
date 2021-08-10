@@ -66,7 +66,7 @@ Edit the `.env` file in your Laravel instance add the following environment vari
 	OPENWEATHER_API_LANG="en"
 	OPENWEATHER_API_DATE_FORMAT="m/d/Y"
 	OPENWEATHER_API_TIME_FORMAT="h:i A"
-	OPENWEATHER_API_DAY_FOPMAT="l"
+	OPENWEATHER_API_DAY_FORMAT="l"
 
 ## Example Usage
 
