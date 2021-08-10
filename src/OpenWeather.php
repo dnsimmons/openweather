@@ -3,6 +3,7 @@
 namespace Dnsimmons\OpenWeather;
 
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
 
 /**
  * OpenWeather is a Laravel package simplifying working with the free Open Weather Map APIs.
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\Config;
  * @package  OpenWeather
  * @author    David Simmons <hello@dsimmons.me>
  * @license    https://opensource.org/licenses/LGPL-3.0 LGPL-3.0
- * @version    1.0.5
+ * @version    1.0.6
  * @since    2019-01-01
  */
 class OpenWeather
@@ -57,8 +58,43 @@ class OpenWeather
     private function doRequest(string $url)
     {
         $response = @file_get_contents($url);
-        return (!$response) ? FALSE : $response;
+        if(!$response){
+            Log::error('OpenWeather - Error fetching response from '.$url);
+            return false;
+        }
+        return $response;
     }
+
+    /**
+     * Calculates the textual compass direction from a bearing in degrees.
+     * Returns a cardinal compass direction on success and an empty string
+     * on failure.
+     *
+     * @param int $degrees
+     * @return string
+     */
+    private function getDirection(int $degrees): string
+    {
+        $direction = '';
+        $cardinal  = [
+            'N'  => [337.5, 22.5],
+            'NE' => [22.5, 67.5],
+            'E'  => [67.5, 112.5],
+            'SE' => [112.5, 157.5],
+            'S'  => [157.5, 202.5],
+            'SW' => [202.5, 247.5],
+            'W'  => [247.5, 292.5],
+            'NW' => [292.5, 337.5]
+        ];
+        foreach ($cardinal as $dir => $angles) {
+            if ($degrees >= $angles[0] && $degrees < $angles[1]) {
+                $direction = $dir;
+                break;
+            }
+        }
+        return $direction;
+    }
+
 
     /**
      * Parses and returns an OpenWeather current weather API response as an array of formatted values.
@@ -70,9 +106,10 @@ class OpenWeather
     private function parseCurrentResponse(string $response)
     {
 
-        $struct = json_decode($response, TRUE);
+        $struct = json_decode($response, true);
         if (!isset($struct['cod']) || $struct['cod'] != 200) {
-            return FALSE;
+            Log::error('OpenWeather - Error parsing current response.');
+            return false;
         }
         return [
             'formats' => [
@@ -106,8 +143,9 @@ class OpenWeather
                 'icon' => $this->api_endpoint_icons . $struct['weather'][0]['icon'] . '.png',
             ],
             'wind' => [
-                'speed' => $struct['wind']['speed'],
-                'deg'   => $struct['wind']['deg'],
+                'speed'     => $struct['wind']['speed'],
+                'deg'       => $struct['wind']['deg'],
+                'direction' => $this->getDirection($struct['wind']['deg'])
             ],
             'forecast' => [
                 'temp' => round($struct['main']['temp']),
@@ -128,9 +166,10 @@ class OpenWeather
      */
     private function parseForecastResponse(string $response)
     {
-        $struct = json_decode($response, TRUE);
+        $struct = json_decode($response, true);
         if (!isset($struct['cod']) || $struct['cod'] != 200) {
-            return FALSE;
+            Log::error('OpenWeather - Error parsing forecast response.');
+            return false;
         }
 
         $forecast = [];
@@ -155,6 +194,7 @@ class OpenWeather
                 'wind' => [
                     'speed' => $item['wind']['speed'],
                     'deg'   => $item['wind']['deg'],
+                    'direction' => $this->getDirection($item['wind']['deg'])
                 ],
                 'forecast' => [
                     'temp' => round($item['main']['temp']),
@@ -220,6 +260,7 @@ class OpenWeather
             $current['wind'] = [
                 'speed' => $struct['current']['wind_speed'],
                 'deg'   => $struct['current']['wind_deg'],
+                'direction' => $this->getDirection($struct['current']['wind_deg'])
             ];
             $current['forecast'] = [
                 'temp' => round($struct['current']['temp']),
@@ -256,6 +297,7 @@ class OpenWeather
                     'wind' => [
                         'speed' => $item['wind_speed'],
                         'deg'   => $item['wind_deg'],
+                        'direction' => $this->getDirection($item['wind_deg'])
                     ],
                     'forecast' => [
                         'temp' => round($item['temp']),
@@ -290,6 +332,7 @@ class OpenWeather
                     'wind' => [
                         'speed' => $item['wind_speed'],
                         'deg'   => $item['wind_deg'],
+                        'direction' => $this->getDirection($item['wind_deg'])
                     ],
                     'forecast' => [
                         'temp' => round($item['temp']['day']),
@@ -358,6 +401,7 @@ class OpenWeather
             $current['wind'] = [
                 'speed' => $struct['current']['wind_speed'],
                 'deg'   => $struct['current']['wind_deg'],
+                'direction' => $this->getDirection($struct['current']['wind_deg'])
             ];
             $current['forecast'] = [
                 'temp' => round($struct['current']['temp']),
@@ -389,6 +433,7 @@ class OpenWeather
                     'wind' => [
                         'speed' => $item['wind_speed'],
                         'deg'   => $item['wind_deg'],
+                        'direction' => $this->getDirection($item['wind_deg'])
                     ],
                     'forecast' => [
                         'temp' => round($item['temp']),
