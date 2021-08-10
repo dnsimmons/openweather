@@ -10,5 +10,5 @@ return [
     'api_lang' 				=> env('OPENWEATHER_API_LANG', 'en'),
     'format_date'           => env('OPENWEATHER_API_DATE_FORMAT', 'm/d/Y'),
     'format_time'           => env('OPENWEATHER_API_TIME_FORMAT', 'h:i A'),
-    'format_day'            => env('OPENWEATHER_API_DAY_FOPMAT', 'l')
+    'format_day'            => env('OPENWEATHER_API_DAY_FORMAT', 'l')
 ];
