@@ -95,6 +95,15 @@ class OpenWeather
         return $direction;
     }
 
+    private function decodeResponse(string $response): array
+    {
+        $struct = json_decode($response, true);
+        if (!isset($struct['cod']) || $struct['cod'] != 200) {
+            Log::error('OpenWeather - Error parsing response.');
+            return [];
+        }
+        return $struct;
+    }
 
     /**
      * Parses and returns an OpenWeather current weather API response as an array of formatted values.
@@ -103,14 +112,13 @@ class OpenWeather
      * @param string $response OpenWeather API response JSON.
      * @return array|bool
      */
-    private function parseCurrentResponse(string $response)
+    protected function parseCurrentResponse(string $response)
     {
-
-        $struct = json_decode($response, true);
-        if (!isset($struct['cod']) || $struct['cod'] != 200) {
-            Log::error('OpenWeather - Error parsing current response.');
+        $struct = $this->decodeResponse($response);
+        if (empty($struct)) {
             return false;
         }
+
         return [
             'formats' => [
                 'lang' => $this->api_lang,
@@ -164,11 +172,10 @@ class OpenWeather
      * @param string $response OpenWeather API response JSON.
      * @return array|bool
      */
-    private function parseForecastResponse(string $response)
+    protected function parseForecastResponse(string $response)
     {
-        $struct = json_decode($response, true);
-        if (!isset($struct['cod']) || $struct['cod'] != 200) {
-            Log::error('OpenWeather - Error parsing forecast response.');
+        $struct = $this->decodeResponse($response);
+        if (empty($struct)) {
             return false;
         }
 
@@ -205,6 +212,62 @@ class OpenWeather
                 ]
             ];
         }
+
+        return $this->parsedPayload($struct, $forecast);
+    }
+
+    protected function parseForecastDailyResponse(string $response)
+    {
+        $struct = $this->decodeResponse($response);
+        if (empty($struct)) {
+            return false;
+        }
+
+        $forecast = \array_map(function($item) { return $this->parseDailyItem($item, false); }, $struct['list']);
+        return $this->parsedPayload($struct, $forecast);
+    }
+
+    private function parseDailyItem(array $item, bool $isOneCall = true): array
+    {
+        return [
+            'datetime' => [
+                'timestamp' => $item['dt'],
+                'timestamp_sunrise' => $item['sunrise'],
+                'timestamp_sunset' => $item['sunset'],
+                'formatted_date' => date($this->format_date, $item['dt']),
+                'formatted_day' => date($this->format_day, $item['dt']),
+                'formatted_time' => date($this->format_time, $item['dt']),
+                'formatted_sunrise' => date($this->format_time, $item['sunrise']),
+                'formatted_sunset' => date($this->format_time, $item['sunset']),
+            ],
+            'condition' => [
+                'id'   => $item['weather'][0]['id'],
+                'name' => $item['weather'][0]['main'],
+                'desc' => $item['weather'][0]['description'],
+                'icon' => $this->api_endpoint_icons . $item['weather'][0]['icon'] . '.png',
+            ],
+            'wind' => [
+                'speed' => $isOneCall ? $item['wind_speed'] : $item['speed'],
+                'deg'   => $isOneCall ? $item['wind_deg'] : $item['deg'],
+                'direction' => $isOneCall ? $this->getDirection($item['wind_deg']) : $this->getDirection($item['deg']),
+            ],
+            'forecast' => [
+                'temp' => round($item['temp']['day']),
+                'temp_min' => round($item['temp']['min']),
+                'temp_max' => round($item['temp']['max']),
+                'pressure' => round($item['pressure']),
+                'humidity' => round($item['humidity']),
+            ]
+        ];
+    }
+
+    /**
+     * @param  array  $struct
+     * @param  array  $forecast
+     * @return array
+     */
+    private function parsedPayload(array $struct, array $forecast): array
+    {
         return [
             'formats' => [
                 'lang' => $this->api_lang,
@@ -231,12 +294,11 @@ class OpenWeather
      * @param string $response OpenWeather API response JSON.
      * @return array|bool
      */
-    private function parseOnecallResponse(string $response)
+    protected function parseOnecallResponse(string $response)
     {
-
-        $struct = json_decode($response, TRUE);
-        if (!isset($struct['cod']) || $struct['cod'] != 200) {
-            // @TODO right now there is no cod element to check in the API response
+        $struct = $this->decodeResponse($response);
+        if (empty($struct)) {
+            return false;
         }
 
         $current = [];
@@ -311,39 +373,7 @@ class OpenWeather
 
         $daily = [];
         if (isset($struct['daily'])) {
-            foreach ($struct['daily'] as $item) {
-                $daily[] = [
-                    'datetime' => [
-                        'timestamp' => $item['dt'],
-                        'timestamp_sunrise' => $item['sunrise'],
-                        'timestamp_sunset' => $item['sunset'],
-                        'formatted_date' => date($this->format_date, $item['dt']),
-                        'formatted_day' => date($this->format_day, $item['dt']),
-                        'formatted_time' => date($this->format_time, $item['dt']),
-                        'formatted_sunrise' => date($this->format_time, $item['sunrise']),
-                        'formatted_sunset' => date($this->format_time, $item['sunset']),
-                    ],
-                    'condition' => [
-                        'id'   => $item['weather'][0]['id'],
-                        'name' => $item['weather'][0]['main'],
-                        'desc' => $item['weather'][0]['description'],
-                        'icon' => $this->api_endpoint_icons . $item['weather'][0]['icon'] . '.png',
-                    ],
-                    'wind' => [
-                        'speed' => $item['wind_speed'],
-                        'deg'   => $item['wind_deg'],
-                        'direction' => $this->getDirection($item['wind_deg'])
-                    ],
-                    'forecast' => [
-                        'temp' => round($item['temp']['day']),
-                        'temp_min' => round($item['temp']['min']),
-                        'temp_max' => round($item['temp']['max']),
-                        'pressure' => round($item['pressure']),
-                        'humidity' => round($item['humidity']),
-                    ]
-                ];
-            }
-            $forecast['daily'] = $daily;
+            $forecast['daily'] = \array_map(function($item) { return $this->parseDailyItem($item); }, $struct['daily']);
         }
 
         return [
@@ -372,12 +402,11 @@ class OpenWeather
      * @param string $response OpenWeather API response JSON.
      * @return array|bool
      */
-    private function parseHistoricalResponse(string $response)
+    protected function parseHistoricalResponse(string $response)
     {
-
-        $struct = json_decode($response, TRUE);
-        if (!isset($struct['cod']) || $struct['cod'] != 200) {
-            // @TODO right now there is no cod element to check in the API response
+        $struct = $this->decodeResponse($response);
+        if (empty($struct)) {
+            return false;
         }
 
         $current = [];
@@ -470,7 +499,7 @@ class OpenWeather
      * @param array $params Array of request parameters.
      * @return array|bool
      */
-    private function getCurrentWeather(array $params)
+    protected function getCurrentWeather(array $params)
     {
         $params = http_build_query($params);
         $request = $this->api_endpoint_current . $params;
@@ -492,7 +521,7 @@ class OpenWeather
      * @param array $params Array of request parameters.
      * @return array|bool
      */
-    private function getForecastWeather(array $params)
+    protected function getForecastWeather(array $params)
     {
         $params = http_build_query($params);
         $request = $this->api_endpoint_forecast . $params;
@@ -507,6 +536,21 @@ class OpenWeather
         return $response;
     }
 
+    protected function getDailyForecastWeather(array $params)
+    {
+        $params = http_build_query($params);
+        $request = $this->api_endpoint_forecast_daily . $params;
+        $response = $this->doRequest($request);
+        if (!$response) {
+            return FALSE;
+        }
+        $response = $this->parseForecastDailyResponse($response);
+        if (!$response) {
+            return FALSE;
+        }
+        return $response;
+    }
+
     /**
      * Returns an OpenWeather API response for onecall weather.
      * Returns FALSE on failure.
@@ -514,7 +558,7 @@ class OpenWeather
      * @param array $params Array of request parameters.
      * @return array|bool
      */
-    private function getOnecallWeather(array $params)
+    protected function getOnecallWeather(array $params)
     {
         $params = http_build_query($params);
         $request = $this->api_endpoint_onecall . $params;
@@ -536,7 +580,7 @@ class OpenWeather
      * @param array $params Array of request parameters.
      * @return array|bool
      */
-    private function getHistoricalWeather(array $params)
+    protected function getHistoricalWeather(array $params)
     {
         $params = http_build_query($params);
         $request = $this->api_endpoint_history . $params;
@@ -701,6 +745,88 @@ class OpenWeather
         $this->format_units = $units;
         return $this->getForecastWeather([
             'zip' => $postal,
+            'units' => $units,
+            'lang' => $this->api_lang,
+            'appid' => $this->api_key
+        ]);
+    }
+
+    /**
+     * Returns daily forecast weather up to 16 days by city name (paid plan)
+     *
+     * @param  string  $city
+     * @param  int  $cnt
+     * @param  string  $units
+     * @return array|false
+     */
+    public function getForecastDailyWeatherByCityName(string $city, int $cnt = 7, string $units = 'imperial')
+    {
+        $this->format_units = $units;
+        return $this->getDailyForecastWeather([
+            'q' => $city,
+            'cnt' => $cnt,
+            'units' => $units,
+            'lang' => $this->api_lang,
+            'appid' => $this->api_key
+        ]);
+    }
+
+    /**
+     * Returns daily forecast weather up to 16 days by city name (paid plan)
+     *
+     * @param  int  $id
+     * @param  int  $cnt
+     * @param  string  $units
+     * @return array|false
+     */
+    public function getForecastDailyWeatherByCityId(int $id, int $cnt = 7, string $units = 'imperial')
+    {
+        $this->format_units = $units;
+        return $this->getDailyForecastWeather([
+            'id' => $id,
+            'cnt' => $cnt,
+            'units' => $units,
+            'lang' => $this->api_lang,
+            'appid' => $this->api_key
+        ]);
+    }
+
+    /**
+     * Returns daily forecast weather up to 16 days by latitude and longitude (paid plan)
+     *
+     * @param  string  $latitude
+     * @param  string  $longitude
+     * @param  int  $cnt
+     * @param  string  $units
+     * @return array|false
+     */
+    public function getForecastDailyWeatherByCoords(string $latitude, string $longitude, int $cnt = 7, string $units = 'imperial')
+    {
+        $this->format_units = $units;
+        return $this->getDailyForecastWeather([
+            'lat' => $latitude,
+            'lon' => $longitude,
+            'cnt' => $cnt,
+            'units' => $units,
+            'lang' => $this->api_lang,
+            'appid' => $this->api_key
+        ]);
+    }
+
+    /**
+     * Returns daily forecast weather up to 16 days by ZIP code (paid plan)
+     *
+     * @param  string  $postal
+     * @param  int  $cnt
+     * @param  string  $units
+     * @return array|false
+     */
+    public function getForecastDailyWeatherByPostal(string $postal, int $cnt = 7, string $units = 'imperial')
+    {
+        $this->format_units = $units;
+        return $this->getDailyForecastWeather([
+            'zip' => $postal,
+            'cnt' => $cnt,
             'units' => $units,
             'lang' => $this->api_lang,
             'appid' => $this->api_key
