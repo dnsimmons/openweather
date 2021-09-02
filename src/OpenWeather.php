@@ -21,6 +21,7 @@ class OpenWeather
     private $api_key = NULL;
     private $api_endpoint_current = NULL;
     private $api_endpoint_forecast = NULL;
+    private $api_endpoint_forecast_daily = NULL;
     private $api_endpoint_onecall = NULL;
     private $api_endpoint_history = NULL;
     private $api_endpoint_icons = NULL;
@@ -39,6 +40,7 @@ class OpenWeather
         $this->api_key = Config::get('openweather.api_key');
         $this->api_endpoint_current = Config::get('openweather.api_endpoint_current');
         $this->api_endpoint_forecast = Config::get('openweather.api_endpoint_forecast');
+        $this->api_endpoint_forecast_daily = Config::get('openweather.api_endpoint_forecast_daily');
         $this->api_endpoint_onecall = Config::get('openweather.api_endpoint_onecall');
         $this->api_endpoint_history = Config::get('openweather.api_endpoint_history');
         $this->api_endpoint_icons = Config::get('openweather.api_endpoint_icons');
