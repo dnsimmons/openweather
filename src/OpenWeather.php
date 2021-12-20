@@ -24,6 +24,7 @@ class OpenWeather
     private $api_endpoint_onecall = NULL;
     private $api_endpoint_history = NULL;
     private $api_endpoint_icons = NULL;
+    private $api_endpoint_icons_ext = NULL;
     private $api_lang = NULL;
     private $format_date = NULL;
     private $format_time = NULL;
@@ -42,6 +43,7 @@ class OpenWeather
         $this->api_endpoint_onecall = Config::get('openweather.api_endpoint_onecall');
         $this->api_endpoint_history = Config::get('openweather.api_endpoint_history');
         $this->api_endpoint_icons = Config::get('openweather.api_endpoint_icons');
+        $this->api_endpoint_icons_ext = Config::get('openweather.api_endpoint_icons_ext');
         $this->api_lang = Config::get('openweather.api_lang');
         $this->format_date = Config::get('openweather.format_date');
         $this->format_time = Config::get('openweather.format_time');
@@ -140,7 +142,7 @@ class OpenWeather
                 'id'   => $struct['weather'][0]['id'],
                 'name' => $struct['weather'][0]['main'],
                 'desc' => $struct['weather'][0]['description'],
-                'icon' => $this->api_endpoint_icons . $struct['weather'][0]['icon'] . '.png',
+                'icon' => $this->api_endpoint_icons . $struct['weather'][0]['icon'] . '.'.$this->api_endpoint_icons_ext,
             ],
             'wind' => [
                 'speed'     => $struct['wind']['speed'],
@@ -189,7 +191,7 @@ class OpenWeather
                     'id'   => $item['weather'][0]['id'],
                     'name' => $item['weather'][0]['main'],
                     'desc' => $item['weather'][0]['description'],
-                    'icon' => $this->api_endpoint_icons . $item['weather'][0]['icon'] . '.png',
+                    'icon' => $this->api_endpoint_icons . $item['weather'][0]['icon'] . '.'.$this->api_endpoint_icons_ext,
                 ],
                 'wind' => [
                     'speed' => $item['wind']['speed'],
@@ -255,7 +257,7 @@ class OpenWeather
                 'id'   => $struct['current']['weather'][0]['id'],
                 'name' => $struct['current']['weather'][0]['main'],
                 'desc' => $struct['current']['weather'][0]['description'],
-                'icon' => $this->api_endpoint_icons . $struct['current']['weather'][0]['icon'] . '.png',
+                'icon' => $this->api_endpoint_icons . $struct['current']['weather'][0]['icon'] . '.'.$this->api_endpoint_icons_ext,
             ];
             $current['wind'] = [
                 'speed' => $struct['current']['wind_speed'],
@@ -292,7 +294,7 @@ class OpenWeather
                         'id'   => $item['weather'][0]['id'],
                         'name' => $item['weather'][0]['main'],
                         'desc' => $item['weather'][0]['description'],
-                        'icon' => $this->api_endpoint_icons . $item['weather'][0]['icon'] . '.png',
+                        'icon' => $this->api_endpoint_icons . $item['weather'][0]['icon'] . '.'.$this->api_endpoint_icons_ext,
                     ],
                     'wind' => [
                         'speed' => $item['wind_speed'],
@@ -327,7 +329,7 @@ class OpenWeather
                         'id'   => $item['weather'][0]['id'],
                         'name' => $item['weather'][0]['main'],
                         'desc' => $item['weather'][0]['description'],
-                        'icon' => $this->api_endpoint_icons . $item['weather'][0]['icon'] . '.png',
+                        'icon' => $this->api_endpoint_icons . $item['weather'][0]['icon'] . '.'.$this->api_endpoint_icons_ext,
                     ],
                     'wind' => [
                         'speed' => $item['wind_speed'],
@@ -396,7 +398,7 @@ class OpenWeather
                 'id'   => $struct['current']['weather'][0]['id'],
                 'name' => $struct['current']['weather'][0]['main'],
                 'desc' => $struct['current']['weather'][0]['description'],
-                'icon' => $this->api_endpoint_icons . $struct['current']['weather'][0]['icon'] . '.png',
+                'icon' => $this->api_endpoint_icons . $struct['current']['weather'][0]['icon'] . '.'.$this->api_endpoint_icons_ext,
             ];
             $current['wind'] = [
                 'speed' => $struct['current']['wind_speed'],
@@ -428,7 +430,7 @@ class OpenWeather
                         'id'   => $item['weather'][0]['id'],
                         'name' => $item['weather'][0]['main'],
                         'desc' => $item['weather'][0]['description'],
-                        'icon' => $this->api_endpoint_icons . $item['weather'][0]['icon'] . '.png',
+                        'icon' => $this->api_endpoint_icons . $item['weather'][0]['icon'] . '.'.$this->api_endpoint_icons_ext,
                     ],
                     'wind' => [
                         'speed' => $item['wind_speed'],
