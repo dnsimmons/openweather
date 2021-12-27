@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
  * @package  OpenWeather
  * @author    David Simmons <hello@dsimmons.me>
  * @license    https://opensource.org/licenses/LGPL-3.0 LGPL-3.0
- * @version    1.0.6
+ * @version    1.0.7
  * @since    2019-01-01
  */
 class OpenWeather
